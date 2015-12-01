@@ -1,6 +1,7 @@
 #include "qurt_log.h"
+#include "helloworld.h"
 
-int main(int argv, char *argc[])
+uint32 helloworld_say_hello()
 {
 	LOG_MSG("Hello World");
 	return 0;

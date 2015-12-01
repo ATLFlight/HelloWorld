@@ -1,0 +1,10 @@
+#ifndef HELLO_WORLD_IDL
+#define HELLO_WORLD_IDL
+
+#include "AEEStdDef.idl"
+
+interface helloworld{
+    uint32 say_hello();
+};
+
+#endif /*HELLO_WORLD_IDL*/
