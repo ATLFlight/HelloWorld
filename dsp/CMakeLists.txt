@@ -39,6 +39,7 @@ set(version_patch 0)
 set(version "${version_major}.${version_minor}.${version_patch}")
 set(package-contact "charlebm@gmail.com")
 
+include(${CMAKE_TOOLCHAIN_FILE})
 if ("$ENV{HEXAGON_TOOLS_ROOT}" STREQUAL "")
 	message( FATAL_ERROR "HEXAGON_TOOLS_ROOT not set")
 endif()
@@ -47,10 +48,27 @@ if ("$ENV{HEXAGON_SDK_ROOT}" STREQUAL "")
 	message( FATAL_ERROR "HEXAGON_SDK_ROOT not set")
 endif()
 
+set(HEXAGON_TOOLS_ROOT $ENV{HEXAGON_TOOLS_ROOT})
+set(HEXAGON_SDK_ROOT $ENV{HEXAGON_SDK_ROOT})
+
+include_directories(
+	${HEXAGON_TOOLS_ROOT}/target/hexagon/include
+	${HEXAGON_SDK_ROOT}/inc/stddef
+	${HEXAGON_SDK_ROOT}/lib/common/remote/ship/hexagon_Debug
+	)
+
 message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 
-add_library(helloworld 
+set(HEXAGON_SDK_LIB_DIR ${HEXAGON_SDK_ROOT}/lib/common/remote/ship/hexagon_Debug)
+
+add_library(helloworld SHARED
 	../helloworld_qurt.c
+	../helloworld_skel.c
 	)
+
+add_library(adsprpc SHARED IMPORTED)
+set_target_properties(adsprpc PROPERTIES IMPORTED_LOCATION ${HEXAGON_SDK_LIB_DIR}/libadsprpc.so)
+
+TARGET_LINK_LIBRARIES(helloworld adsprpc)
 
 # vim: set noet fenc=utf-8 ff=unix ft=cmake :

@@ -75,11 +75,6 @@ set(CMAKE_NM	  ${HEXAGON_BIN}/${CROSSDEV}nm)
 set(CMAKE_OBJDUMP ${HEXAGON_BIN}/${CROSSDEV}objdump)
 set(CMAKE_OBJCOPY ${HEXAGON_BIN}/${CROSSDEV}objcopy)
 
-list2string(HEXAGON_INCLUDE_DIRS 
-	-I${HEXAGON_TOOLS_ROOT}/target/hexagon/include
-	-I${HEXAGON_SDK_ROOT}/inc/stddef
-	)
-
 #set(DYNAMIC_LIBS  -Wl,${TOOLSLIB}/pic/libstdc++.a)
 
 #set(MAXOPTIMIZATION -O0)

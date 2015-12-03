@@ -39,15 +39,18 @@ set(version_patch 0)
 set(version "${version_major}.${version_minor}.${version_patch}")
 set(package-contact "charlebm@gmail.com")
 
-if ("$ENV{HEXAGON_SDK_ROOT}" STREQUAL "")
-	message( FATAL_ERROR "HEXAGON_SDK_ROOT not set")
-endif()
-
 message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 
 add_executable(helloworld 
 	../helloworld.c
 	../helloworld_stub.c
 	)
+
+set(HEXAGON_SDK_ARM_LIB_DIR ${HEXAGON_SDK_ROOT}/lib/common/remote/ship/UbuntuARM_Debug)
+
+add_library(adsprpc SHARED IMPORTED)
+set_target_properties(adsprpc PROPERTIES IMPORTED_LOCATION ${HEXAGON_SDK_ARM_LIB_DIR}/libadsprpc.so)
+
+TARGET_LINK_LIBRARIES(helloworld adsprpc)
 
 # vim: set noet fenc=utf-8 ff=unix ft=cmake :
