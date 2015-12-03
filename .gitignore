@@ -1,0 +1,5 @@
+build_arm/
+build_dsp/
+helloworld.h
+helloworld_skel.c
+helloworld_stub.c
