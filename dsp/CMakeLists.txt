@@ -52,23 +52,18 @@ set(HEXAGON_TOOLS_ROOT $ENV{HEXAGON_TOOLS_ROOT})
 set(HEXAGON_SDK_ROOT $ENV{HEXAGON_SDK_ROOT})
 
 include_directories(
-	${HEXAGON_TOOLS_ROOT}/target/hexagon/include
+	${HEXAGON_TOOLS_ROOT}/Tools/target/hexagon/include
 	${HEXAGON_SDK_ROOT}/inc/stddef
 	${HEXAGON_SDK_ROOT}/lib/common/remote/ship/hexagon_Debug
 	)
 
 message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 
-set(HEXAGON_SDK_LIB_DIR ${HEXAGON_SDK_ROOT}/lib/common/remote/ship/hexagon_Debug)
+set(CMAKE_SHARED_LIB_FLAGS "-L${HEXAGON_SDK_ROOT}/lib/common/remote/ship/hexagon_Debug -l adsprpc")
 
-add_library(helloworld SHARED
+add_library(helloworld_skel SHARED
 	../helloworld_qurt.c
 	../helloworld_skel.c
 	)
-
-add_library(adsprpc SHARED IMPORTED)
-set_target_properties(adsprpc PROPERTIES IMPORTED_LOCATION ${HEXAGON_SDK_LIB_DIR}/libadsprpc.so)
-
-TARGET_LINK_LIBRARIES(helloworld adsprpc)
 
 # vim: set noet fenc=utf-8 ff=unix ft=cmake :

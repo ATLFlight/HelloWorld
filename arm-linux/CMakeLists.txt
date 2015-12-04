@@ -46,11 +46,10 @@ add_executable(helloworld
 	../helloworld_stub.c
 	)
 
-set(HEXAGON_SDK_ARM_LIB_DIR ${HEXAGON_SDK_ROOT}/lib/common/remote/ship/UbuntuARM_Debug)
+target_link_libraries(helloworld
+        -L${HEXAGON_SDK_ROOT}/lib/common/remote/ship/UbuntuARM_Debug 
+	adsprpc
+	)
 
-add_library(adsprpc SHARED IMPORTED)
-set_target_properties(adsprpc PROPERTIES IMPORTED_LOCATION ${HEXAGON_SDK_ARM_LIB_DIR}/libadsprpc.so)
-
-TARGET_LINK_LIBRARIES(helloworld adsprpc)
 
 # vim: set noet fenc=utf-8 ff=unix ft=cmake :

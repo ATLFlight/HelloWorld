@@ -13,8 +13,9 @@ build_arm/helloworld: stubs
 	mkdir -p build_arm && cd build_arm && cmake -Wno-dev ../arm-linux -DCMAKE_TOOLCHAIN_FILE=Toolchain-arm-linux-gnueabihf.cmake
 	cd build_arm && make
 
-run: build/libhelloworld.so
-	adb push build/libhelloworld.so 
+load: build/libhelloworld.so
+	adb push build_dsp/libhelloworld_skel.so /usr/share/data/adsp/
+	adb push build_arm/helloworld /home/linaro/
 
 clean:
 	rm -rf build* helloworld_stub.c helloworld_skel.c helloworld.h
