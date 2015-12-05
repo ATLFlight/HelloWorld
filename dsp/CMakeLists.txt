@@ -60,7 +60,7 @@ message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 set(CMAKE_SHARED_LIB_FLAGS "-L${HEXAGON_SDK_ROOT}/lib/common/remote/ship/hexagon_Debug -l adsprpc")
 
 add_library(helloworld SHARED
-	../helloworld_qurt.c
+	../helloworld_dsp.c
 	)
 
 add_library(helloworld_skel SHARED

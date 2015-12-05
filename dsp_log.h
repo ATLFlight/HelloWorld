@@ -1,5 +1,5 @@
 /****************************************************************************
- *   Copyright (c) 2015 Mark Charlebois. All rights reserved.
+ * Copyright (C) 2015 Mark Charlebois. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,11 +29,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
-#include "qurt_log.h"
-#include "helloworld.h"
+#pragma once
 
-uint32 helloworld_say_hello()
+#include <stdarg.h>
+#include <stdio.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define LOG_MSG(...) qurt_log(0, __FILE__, __LINE__, __VA_ARGS__)
+
+// declaration to make the compiler happy.  This symbol is part of the DSP static image.
+void HAP_debug(const char *msg, int level, const char *filename, int line);
+
+static __inline void qurt_log(int level, const char *file, int line, const char *format, ...)
 {
-	LOG_MSG("Hello World");
-	return 0;
+	char buf[256];
+	va_list args;
+	va_start(args, format);
+	vsnprintf(buf, sizeof(buf), format, args);
+	va_end(args);
+	HAP_debug(buf, level, file, line);
 }
+
+#ifdef __cplusplus
+}
+#endif
