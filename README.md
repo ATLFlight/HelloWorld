@@ -1,7 +1,7 @@
 # HelloWorld
 
 A simple hello world program to demonstrate how to run a
-program on the Hexagon&trade; DSP.
+program on the Hexagon DSP.
 
 The Hexagon SDK 2.0 and following environment varaiables need to be set:
 
