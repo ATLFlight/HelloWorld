@@ -52,7 +52,7 @@ build_arm/helloworld: stubs ENV_VARS
 load-hello: build_dsp/libhelloworld.so build_arm/helloworld
 	@adb wait-for-devices
 	@adb push build_dsp/libhelloworld_skel.so /usr/share/data/adsp/
-	@adb push build_dsp/libhelloworld.so /usr/share/data/adsp/	
+	@adb push build_dsp/libhelloworld.so /home/linaro/
 	@adb push build_arm/helloworld /home/linaro/
 
 .PHONY: ADD_ON
