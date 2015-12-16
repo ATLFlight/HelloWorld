@@ -50,12 +50,10 @@ set(HEXAGON_TOOLS_ROOT $ENV{HEXAGON_TOOLS_ROOT})
 set(HEXAGON_SDK_ROOT $ENV{HEXAGON_SDK_ROOT})
 
 include_directories(
-	${HEXAGON_TOOLS_ROOT}/Tools/target/hexagon/include
+	${HEXAGON_TOOLS_ROOT}/target/hexagon/include
 	${HEXAGON_SDK_ROOT}/inc/stddef
 	${HEXAGON_SDK_ROOT}/lib/common/remote/ship/hexagon_Debug
 	)
-
-message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 
 set(CMAKE_SHARED_LIB_FLAGS "-L${HEXAGON_SDK_ROOT}/lib/common/remote/ship/hexagon_Debug -l adsprpc")
 

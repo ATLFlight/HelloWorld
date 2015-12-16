@@ -37,7 +37,9 @@ set(version_patch 0)
 set(version "${version_major}.${version_minor}.${version_patch}")
 set(package-contact "charlebm@gmail.com")
 
-message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
+if ("$ENV{HEXAGON_SDK_ROOT}" STREQUAL "")
+        message( FATAL_ERROR "HEXAGON_SDK_ROOT not set")
+endif()
 
 add_executable(helloworld 
 	../helloworld.c
@@ -48,6 +50,5 @@ target_link_libraries(helloworld
         -L${HEXAGON_SDK_ROOT}/lib/common/remote/ship/UbuntuARM_Debug 
 	adsprpc
 	)
-
 
 # vim: set noet fenc=utf-8 ff=unix ft=cmake :
