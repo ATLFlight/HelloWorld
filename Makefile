@@ -29,41 +29,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ############################################################################
 
-all: build_dsp/libhelloworld.so build_arm/helloworld
-
-stubs: helloworld_skel.c helloworld_stub.c
-
-.PHONY: ENV_VARS
-ENV_VARS:
-	@[ ! -z "${HEXAGON_SDK_ROOT}" ] || (echo "HEXAGON_SDK_ROOT not set" && false)
-	@[ ! -z "${HEXAGON_TOOLS_ROOT}" ] || (echo "HEXAGON_TOOLS_ROOT not set" && false)
-
-helloworld_skel.c helloworld_stub.c: helloworld.idl ENV_VARS
-	@${HEXAGON_SDK_ROOT}/tools/qaic/Ubuntu14/qaic -mdll -I ${HEXAGON_SDK_ROOT}/inc/stddef helloworld.idl
-
-build_dsp/libhelloworld.so: stubs ENV_VARS
-	@mkdir -p build_dsp && cd build_dsp && cmake -Wno-dev ../dsp -DCMAKE_TOOLCHAIN_FILE=Toolchain-qurt.cmake
-	@cd build_dsp && make
-	
-build_arm/helloworld: stubs ENV_VARS
-	@mkdir -p build_arm && cd build_arm && cmake -Wno-dev ../arm-linux -DCMAKE_TOOLCHAIN_FILE=Toolchain-arm-linux-gnueabihf.cmake
-	@cd build_arm && make
-
-load-hello: build_dsp/libhelloworld.so build_arm/helloworld
-	@adb wait-for-devices
-	@adb push build_dsp/libhelloworld_skel.so /usr/share/data/adsp/
-	@adb push build_dsp/libhelloworld.so /usr/share/data/adsp/
-	@adb push build_arm/helloworld /home/linaro/
-
-.PHONY: ADD_ON
-ADD_ON:
-	@[ ! -z "${HEXAGON_FC_ADDON}" ] || (echo "HEXAGON_FC_ADDON not set" && false)
-
-load-adsp: ADD_ON
-	@adb wait-for-devices
-	@adb push ${HEXAGON_FC_ADDON}/images/8074-eagle/normal/adsp_proc/obj/qdsp6v5_ReleaseG/LA/system/etc/firmware /lib/firmware
-	@adb shell sync
-	@adb reboot
+all:
+	@mkdir -p build && cd build && cmake -Wno-dev .. -DCMAKE_TOOLCHAIN_FILE=cmake_hexagon/toolchain/Toolchain-qurt.cmake
+	@cd build && make
 
 clean:
-	@rm -rf build* helloworld_stub.c helloworld_skel.c helloworld.h
+	@rm -rf build 
