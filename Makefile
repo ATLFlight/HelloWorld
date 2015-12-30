@@ -30,9 +30,14 @@
 ############################################################################
 
 .PHONY all:
-all:
+all: submodule
 	@mkdir -p build && cd build && cmake -Wno-dev .. -DCMAKE_TOOLCHAIN_FILE=cmake_hexagon/toolchain/Toolchain-qurt.cmake
 	@cd build && make
+
+.PHONY submodule:
+submodule:
+	git submodule init
+	git submodule update
 
 clean:
 	@rm -rf build
