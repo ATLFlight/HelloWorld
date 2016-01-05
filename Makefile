@@ -29,9 +29,22 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ############################################################################
 
-all:
+.PHONY all:
+all: submodule
 	@mkdir -p build && cd build && cmake -Wno-dev .. -DCMAKE_TOOLCHAIN_FILE=cmake_hexagon/toolchain/Toolchain-qurt.cmake
 	@cd build && make
 
+.PHONY submodule:
+submodule:
+	git submodule init
+	git submodule update
+
 clean:
-	@rm -rf build 
+	@rm -rf build
+
+load: all
+	adb shell rm -f /usr/share/data/adsp/libhelloworld_skel.so /usr/share/data/adsp/libhelloworld.so /home/linaro/helloworld_app
+	adb push build/libhelloworld_skel.so /usr/share/data/adsp/
+	adb push build/libhelloworld.so /usr/share/data/adsp/
+	adb push build/helloworld_app /home/linaro/
+	adb shell sync
