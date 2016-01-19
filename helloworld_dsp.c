@@ -30,9 +30,9 @@
  *
  ****************************************************************************/
 #include "dsp_log.h"
-#include "helloworld.h"
+#include "example_interface.h"
 
-uint32 helloworld_say_hello()
+uint32 example_interface_say_hello()
 {
 	LOG_MSG("Hello World");
 	return 0;

@@ -39,7 +39,9 @@ set(package-contact "charlebm@gmail.com")
 
 include(cmake_hexagon/qurt_app.cmake)
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g -std=gnu99 -fno-strict-aliasing -fdata-sections -fno-zero-initialized-in-bss -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable -Wno-gnu-array-member-paren-init -Wno-cast-align -Wno-missing-braces -Wno-strict-aliasing") 
 QURT_BUNDLE(APP_NAME helloworld
+	IDL_FILE example_interface.idl
 	APPS_SOURCES helloworld.c
 	DSP_SOURCES helloworld_dsp.c
 	APPS_COMPILER arm-linux-gnueabihf-gcc

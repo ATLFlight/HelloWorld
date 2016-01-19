@@ -31,10 +31,10 @@
  ****************************************************************************/
 #include <stdio.h>
 
-#include "helloworld.h"
+#include "example_interface.h"
 
 int main()
 {
 	printf("Asking DSP to say hello\n");
-	return helloworld_say_hello();
+	return example_interface_say_hello();
 }
