@@ -53,8 +53,8 @@ clean:
 	@rm -rf build
 
 load: all
-	adb shell rm -f /usr/share/data/adsp/libhelloworld_skel.so /usr/share/data/adsp/libhelloworld.so /home/linaro/helloworld_app
-	adb push build/libhelloworld_skel.so /usr/share/data/adsp/
+	adb shell rm -f /usr/share/data/adsp/libexample_interface_skel.so /usr/share/data/adsp/libhelloworld.so /home/linaro/helloworld_app
+	adb push build/libexample_interface_skel.so /usr/share/data/adsp/
 	adb push build/libhelloworld.so /usr/share/data/adsp/
 	adb push build/helloworld_app /home/linaro/
 	adb shell sync
