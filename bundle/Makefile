@@ -29,17 +29,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ############################################################################
 
-# This Makefile shows two examples of how to build a QuRT application.
-# helloworld-bundle builds both the apps proc and dsp sides of the app from
-# one CMakeLists.txt file.
-#
-# An alternative wat to build the app is to build the adsp lib and apps proc
-# portions separately.
-# helloworld builds just the apps proc portion and
-# libhelloworld just builds the adsp portion.
-
 .PHONY all:
-all: helloworld libhelloworld
+all: helloworld-bundle
 
 GETTING_STARTED_MSG="See https://github.com/ATLFlight/ATLFlightDocs/blob/master/GettingStarted.md"
 
@@ -48,19 +39,12 @@ GETTING_STARTED_MSG="See https://github.com/ATLFlight/ATLFlightDocs/blob/master/
 	@if [ "${HEXAGON_SDK_ROOT}" = "" ]; then echo "HEXAGON_SDK_ROOT not set"; echo ${GETTING_STARTED_MSG}; false; fi
 	@if [ "${HEXAGON_TOOLS_ROOT}" = "" ]; then echo "HEXAGON_TOOLS_ROOT not set"; echo ${GETTING_STARTED_MSG}; false; fi
 
+# This target builds helloworld_app for apps proc, and libhelloworld.so and libhelloworld_skel.so for adsp proc
+.PHONY helloworld-bundle:
+helloworld-bundle: check_env submodule
+	@mkdir -p build_bundle && cd build_bundle && cmake -Wno-dev ../ -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-qurt.cmake
+	@cd build_bundle && make
 
-# This target builds only helloworld for apps proc
-.PHONY helloworld:
-helloworld:
-	@mkdir -p build_apps && cd build_apps && cmake -Wno-dev ../apps_proc -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-arm-linux-gnueabihf.cmake
-	@cd build_apps && make
-	
-# This target builds only libhelloworld.so and libhelloworld_skel.so for adsp proc
-.PHONY libhelloworld:
-libhelloworld:
-	@mkdir -p build_adsp && cd build_adsp && cmake -Wno-dev ../adsp_proc -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-qurt.cmake
-	@cd build_adsp && make
-	
 .PHONY submodule:
 submodule: cmake_hexagon
 
@@ -68,10 +52,9 @@ cmake_hexagon:
 	git submodule update --init
 
 clean:
-	@rm -rf build_adsp build_apps
+	@rm -rf build_bundle
 
-load: libhelloworld helloworld
+load-bundle: helloworld-bundle
 	adb shell rm -f /usr/share/data/adsp/libexample_interface_skel.so /usr/share/data/adsp/libhelloworld.so /home/linaro/helloworld*
-	cd build_adsp && make libhelloworld-load
-	cd build_apps && make helloworld-load
+	cd build_bundle && make helloworld-load
 

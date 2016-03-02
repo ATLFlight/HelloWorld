@@ -37,13 +37,15 @@ set(version_patch 0)
 set(version "${version_major}.${version_minor}.${version_patch}")
 set(package-contact "charlebm@gmail.com")
 
-include(cmake_hexagon/qurt_app.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake_hexagon")
+include(bundle)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g -std=gnu99 -fno-strict-aliasing -fdata-sections -fno-zero-initialized-in-bss -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable -Wno-gnu-array-member-paren-init -Wno-cast-align -Wno-missing-braces -Wno-strict-aliasing") 
+
 QURT_BUNDLE(APP_NAME helloworld
-	IDL_FILE example_interface.idl
-	APPS_SOURCES helloworld.c
-	DSP_SOURCES helloworld_dsp.c
+	IDL_FILE ../common/example_interface.idl
+	APPS_SOURCES ../apps_proc/helloworld.c
+	DSP_SOURCES ../adsp_proc/helloworld_dsp.c
 	APPS_COMPILER arm-linux-gnueabihf-gcc
 	)
 

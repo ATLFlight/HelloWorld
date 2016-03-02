@@ -1,5 +1,3 @@
-build_arm/
-build_dsp/
-helloworld.h
-helloworld_skel.c
-helloworld_stub.c
+build_adsp/
+build_apps/
+bundle/build_bundle

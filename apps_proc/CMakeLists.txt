@@ -29,49 +29,24 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ############################################################################
 
-# This Makefile shows two examples of how to build a QuRT application.
-# helloworld-bundle builds both the apps proc and dsp sides of the app from
-# one CMakeLists.txt file.
-#
-# An alternative wat to build the app is to build the adsp lib and apps proc
-# portions separately.
-# helloworld builds just the apps proc portion and
-# libhelloworld just builds the adsp portion.
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-.PHONY all:
-all: helloworld libhelloworld
+set(version_major 0)
+set(version_minor 1)
+set(version_patch 0)
+set(version "${version_major}.${version_minor}.${version_patch}")
+set(package-contact "charlebm@gmail.com")
 
-GETTING_STARTED_MSG="See https://github.com/ATLFlight/ATLFlightDocs/blob/master/GettingStarted.md"
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake_hexagon")
+include(linux_app)
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g -std=gnu99 -fno-strict-aliasing -fdata-sections -fno-zero-initialized-in-bss -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable -Wno-gnu-array-member-paren-init -Wno-cast-align -Wno-missing-braces -Wno-strict-aliasing") 
 
-.PHONY check_env:
-	@if [ "${HEXAGON_SDK_ROOT}" = "" ]; then echo "HEXAGON_SDK_ROOT not set"; echo ${GETTING_STARTED_MSG}; false; fi
-	@if [ "${HEXAGON_TOOLS_ROOT}" = "" ]; then echo "HEXAGON_TOOLS_ROOT not set"; echo ${GETTING_STARTED_MSG}; false; fi
+FASTRPC_STUB_GEN(../common/example_interface.idl)
 
+LINUX_APP(APP_NAME helloworld
+	IDL_NAME example_interface
+	SOURCES ../apps_proc/helloworld.c
+	)
 
-# This target builds only helloworld for apps proc
-.PHONY helloworld:
-helloworld:
-	@mkdir -p build_apps && cd build_apps && cmake -Wno-dev ../apps_proc -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-arm-linux-gnueabihf.cmake
-	@cd build_apps && make
-	
-# This target builds only libhelloworld.so and libhelloworld_skel.so for adsp proc
-.PHONY libhelloworld:
-libhelloworld:
-	@mkdir -p build_adsp && cd build_adsp && cmake -Wno-dev ../adsp_proc -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-qurt.cmake
-	@cd build_adsp && make
-	
-.PHONY submodule:
-submodule: cmake_hexagon
-
-cmake_hexagon:
-	git submodule update --init
-
-clean:
-	@rm -rf build_adsp build_apps
-
-load: libhelloworld helloworld
-	adb shell rm -f /usr/share/data/adsp/libexample_interface_skel.so /usr/share/data/adsp/libhelloworld.so /home/linaro/helloworld*
-	cd build_adsp && make libhelloworld-load
-	cd build_apps && make helloworld-load
-
+# vim: set noet fenc=utf-8 ff=unix ft=cmake :
