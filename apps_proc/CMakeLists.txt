@@ -37,6 +37,10 @@ set(version_patch 0)
 set(version "${version_major}.${version_minor}.${version_patch}")
 set(package-contact "charlebm@gmail.com")
 
+# The toolchain file must be included or the variables are not set for the first build
+# If make is run twice, the variables are set the second time only otherwise.
+include(${CMAKE_TOOLCHAIN_FILE})
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake_hexagon")
 include(linux_app)
 
@@ -46,7 +50,7 @@ FASTRPC_STUB_GEN(../common/example_interface.idl)
 
 LINUX_APP(APP_NAME helloworld
 	IDL_NAME example_interface
-	SOURCES ../apps_proc/helloworld.c
+	SOURCES helloworld.c
 	)
 
 # vim: set noet fenc=utf-8 ff=unix ft=cmake :
