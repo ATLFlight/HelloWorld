@@ -37,10 +37,6 @@ set(version_patch 0)
 set(version "${version_major}.${version_minor}.${version_patch}")
 set(package-contact "charlebm@gmail.com")
 
-# The toolchain file must be included or the variables are not set for the first build
-# If make is run twice, the variables are set the second time only otherwise.
-include(${CMAKE_TOOLCHAIN_FILE})
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake_hexagon")
 include(linux_app)
 
