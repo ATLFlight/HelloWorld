@@ -29,6 +29,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ############################################################################
 
+QC_SOC_TARGET?="APQ8074"
+
 .PHONY all:
 all: helloworld-bundle
 
@@ -42,7 +44,7 @@ GETTING_STARTED_MSG="See https://github.com/ATLFlight/ATLFlightDocs/blob/master/
 # This target builds helloworld_app for apps proc, and libhelloworld.so and libhelloworld_skel.so for adsp proc
 .PHONY helloworld-bundle:
 helloworld-bundle: check_env submodule
-	@mkdir -p build_bundle && cd build_bundle && cmake -Wno-dev ../ -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-qurt.cmake
+	@mkdir -p build_bundle && cd build_bundle && cmake -Wno-dev ../ -DQC_SOC_TARGET=${QC_SOC_TARGET} -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-qurt.cmake
 	@cd build_bundle && make
 
 .PHONY submodule:
