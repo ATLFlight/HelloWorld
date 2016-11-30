@@ -46,7 +46,7 @@ QURT_BUNDLE(APP_NAME helloworld
 	IDL_FILE ../common/example_interface.idl
 	APPS_SOURCES ../apps_proc/helloworld.c
 	DSP_SOURCES ../adsp_proc/helloworld_dsp.c
-	APPS_COMPILER arm-linux-gnueabihf-gcc
+	APPS_COMPILER ${ARM-LINUX-GNUEABIHF-GCC}
 	)
 
 # vim: set noet fenc=utf-8 ff=unix ft=cmake :
