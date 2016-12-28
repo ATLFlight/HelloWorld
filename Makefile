@@ -53,20 +53,20 @@ QC_SOC_TARGET?="APQ8074"
 
 # This target builds only helloworld for apps proc
 .PHONY helloworld:
-helloworld: cmake_hexagon
+helloworld: submodules
 	@mkdir -p build_apps && cd build_apps && cmake -Wno-dev ../apps_proc -DQC_SOC_TARGET=${QC_SOC_TARGET} -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-arm-linux-gnueabihf.cmake
 	@cd build_apps && make
 	
 # This target builds only libhelloworld.so and libhelloworld_skel.so for adsp proc
 .PHONY libhelloworld:
-libhelloworld: cmake_hexagon
+libhelloworld: submodules
 	@mkdir -p build_adsp && cd build_adsp && cmake -Wno-dev ../adsp_proc -DQC_SOC_TARGET=${QC_SOC_TARGET} -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-qurt.cmake
 	@cd build_adsp && make
 	
 .PHONY submodule:
 submodule: cmake_hexagon
 
-cmake_hexagon:
+.PHONY submodules:
 	git submodule update --init
 
 clean:
