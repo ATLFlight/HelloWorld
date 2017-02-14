@@ -44,7 +44,13 @@ all: helloworld libhelloworld
 GETTING_STARTED_MSG="See https://github.com/ATLFlight/ATLFlightDocs/blob/master/GettingStarted.md"
 
 QC_SOC_TARGET?="APQ8074"
+UPDATE_SUB_MODULE_2_LATEST?=0
 
+ifeq (${UPDATE_SUB_MODULE_2_LATEST},1)
+        SUBMODULE_FLAG=--remote
+else
+        SUBMODULE_FLAG=--init
+endif
 
 .PHONY check_env:
 	@if [ "${HEXAGON_SDK_ROOT}" = "" ]; then echo "HEXAGON_SDK_ROOT not set"; echo ${GETTING_STARTED_MSG}; false; fi
@@ -67,7 +73,7 @@ libhelloworld: submodules
 submodule: cmake_hexagon
 
 .PHONY submodules:
-	git submodule update --init
+	git submodule init && git submodule update ${SUBMODULE_FLAG}
 
 clean:
 	@rm -rf build_adsp build_apps
