@@ -38,7 +38,8 @@
 # helloworld builds just the apps proc portion and
 # libhelloworld just builds the adsp portion.
 
-.PHONY all:
+.PHONY all check_env helloworld libhelloworld submodule submodules:
+
 all: helloworld libhelloworld
 
 GETTING_STARTED_MSG="See https://github.com/ATLFlight/ATLFlightDocs/blob/master/GettingStarted.md"
@@ -52,27 +53,24 @@ else
         SUBMODULE_FLAG=--init
 endif
 
-.PHONY check_env:
+check_env:
 	@if [ "${HEXAGON_SDK_ROOT}" = "" ]; then echo "HEXAGON_SDK_ROOT not set"; echo ${GETTING_STARTED_MSG}; false; fi
 	@if [ "${HEXAGON_TOOLS_ROOT}" = "" ]; then echo "HEXAGON_TOOLS_ROOT not set"; echo ${GETTING_STARTED_MSG}; false; fi
 
 
 # This target builds only helloworld for apps proc
-.PHONY helloworld:
 helloworld: submodules
 	@mkdir -p build_apps && cd build_apps && cmake -Wno-dev ../apps_proc -DQC_SOC_TARGET=${QC_SOC_TARGET} -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-arm-linux-gnueabihf.cmake
 	@cd build_apps && make
 	
 # This target builds only libhelloworld.so and libhelloworld_skel.so for adsp proc
-.PHONY libhelloworld:
 libhelloworld: submodules
 	@mkdir -p build_adsp && cd build_adsp && cmake -Wno-dev ../adsp_proc -DQC_SOC_TARGET=${QC_SOC_TARGET} -DCMAKE_TOOLCHAIN_FILE=../cmake_hexagon/toolchain/Toolchain-qurt.cmake
 	@cd build_adsp && make
 	
-.PHONY submodule:
 submodule: cmake_hexagon
 
-.PHONY submodules:
+submodules:
 	git submodule init && git submodule update ${SUBMODULE_FLAG}
 
 clean:
